@@ -1,0 +1,168 @@
+════════════════════════════════════════════════════════════════════════
+  BinHTTP — Annotated Hexdump of One Complete Request / Response
+  Exchange:   GET /index.html   →   200 OK  (HTML file)
+════════════════════════════════════════════════════════════════════════
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  REQUEST FRAME  (client → server)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  The request asks for path "/index.html" with two headers:
+    Host: localhost:9000
+    User-Agent: bcurl/1.0
+
+  Fixed header (9 bytes):
+
+  Offset  Hex   Meaning
+  ------  ----  ----------------------------------------------------------
+  00      01    VER = 0x01  (BinHTTP version 1)
+  01      01    FRAME_TYPE = 0x01  (REQUEST)
+  02      01    FLAGS = 0x01  (END_STREAM — this frame is complete)
+  03      00  ┐
+  04      00  │ PAYLOAD_LENGTH = 0x00000039 = 57 bytes
+  05      00  │   (everything after byte 06)
+  06      39  ┘
+  07      00  ┐ HDR_BLOCK_LEN = 0x0025 = 37 bytes
+  08      25  ┘   (size of the header block section)
+
+  Variable section — REQUEST:
+
+  09      01    METHOD = 0x01  (GET)
+  0a      0c    PATH_LEN = 12  (length of "/index.html")
+  0b–16   2f 69 6e 64 65 78 2e 68 74 6d 6c  → "/index.html"  (11 chars)
+          (note: 0x0c=12, path bytes are 0x0b..0x16)
+
+  Header block (37 bytes):
+  — Header 0 —
+  17      04    name_len = 4
+  18–1b   48 6f 73 74               → "Host"
+  1c      0e    val_len  = 14
+  1d–2a   6c 6f 63 61 6c 68 6f 73 74 3a 39 30 30 30  → "localhost:9000"
+
+  — Header 1 —
+  2b      0a    name_len = 10
+  2c–35   55 73 65 72 2d 41 67 65 6e 74  → "User-Agent"
+  36      09    val_len  = 9
+  37–3f   62 63 75 72 6c 2f 31 2e 30     → "bcurl/1.0"
+
+  Body: 0 bytes  (GET request carries no body)
+
+  Raw bytes (hex):
+
+  0000  01 01 01 00 00 00 39  00 25  |......9.%|
+  0009  01  0c  2f 69 6e 64 65 78 2e 68 74 6d 6c  |../ index.html|
+  0016  04 48 6f 73 74  0e 6c 6f 63 61 6c 68 6f   |.Host.localho|
+  0023  73 74 3a 39 30 30 30  0a 55 73 65 72 2d    |st:9000.User-|
+  0030  41 67 65 6e 74  09 62 63 75 72 6c 2f 31    |Agent.bcurl/1|
+  003d  2e 30                                      |.0|
+
+  Total frame size: 9 (fixed hdr) + 57 (payload) = 66 bytes
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  RESPONSE FRAME  (server → client)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  The server replies 200 OK with the contents of www/index.html.
+  Body = 127 bytes of HTML.  Four headers are sent:
+    Status: 200
+    Content-Type: text/html
+    Content-Length: 127
+    Connection: keep-alive
+
+  Fixed header (9 bytes):
+
+  Offset  Hex   Meaning
+  ------  ----  ----------------------------------------------------------
+  00      01    VER = 0x01
+  01      02    FRAME_TYPE = 0x02  (RESPONSE)
+  02      01    FLAGS = 0x01  (END_STREAM)
+  03      00  ┐
+  04      00  │ PAYLOAD_LENGTH = 0x000000C7 = 199 bytes
+  05      00  │
+  06      c7  ┘
+  07      00  ┐ HDR_BLOCK_LEN = 0x0048 = 72 bytes
+  08      48  ┘
+
+  Variable section — RESPONSE:
+
+  09      02    STATUS_CLASS = 0x02  (2xx)
+  0a      02    REASON_LEN = 2
+  0b–0c   4f 4b               → "OK"
+
+  Header block (72 bytes):
+  — Header 0 —
+  0d      06    name_len = 6
+  0e–13   53 74 61 74 75 73   → "Status"
+  14      03    val_len  = 3
+  15–17   32 30 30            → "200"
+
+  — Header 1 —
+  18      0c    name_len = 12
+  19–24   43 6f 6e 74 65 6e 74 2d 54 79 70 65  → "Content-Type"
+  25      09    val_len  = 9
+  26–2e   74 65 78 74 2f 68 74 6d 6c           → "text/html"
+
+  — Header 2 —
+  2f      0e    name_len = 14
+  30–3d   43 6f 6e 74 65 6e 74 2d 4c 65 6e 67 74 68  → "Content-Length"
+  3e      03    val_len  = 3
+  3f–41   31 32 37            → "127"
+
+  — Header 3 —
+  42      0a    name_len = 10
+  43–4c   43 6f 6e 6e 65 63 74 69 6f 6e        → "Connection"
+  4d      0a    val_len  = 10
+  4e–57   6b 65 65 70 2d 61 6c 69 76 65        → "keep-alive"
+
+  Body (127 bytes) — starts at offset 0x58 inside payload:
+  3c 21 44 4f 43 54 59 50 45 20 68 74 6d 6c 3e  <!DOCTYPE html>
+  0a 3c 68 74 6d 6c 3e 0a 3c 68 65 61 64 3e …  (HTML content)
+  … 3c 2f 68 74 6d 6c 3e 0a                    </html>
+
+  Raw bytes — fixed header + start of payload:
+
+  0000  01 02 01 00 00 00 c7  00 48  |.......H|
+  0009  02  02  4f 4b               |..OK|
+  000d  06 53 74 61 74 75 73  03 32 30 30        |.Status.200|
+  0018  0c 43 6f 6e 74 65 6e 74 2d 54 79 70 65   |.Content-Type|
+        09 74 65 78 74 2f 68 74 6d 6c             |.text/html|
+  002f  0e 43 6f 6e 74 65 6e 74 2d 4c 65 6e 67   |.Content-Leng|
+        74 68  03 31 32 37                         |th.127|
+  0042  0a 43 6f 6e 6e 65 63 74 69 6f 6e          |.Connection|
+        0a 6b 65 65 70 2d 61 6c 69 76 65          |.keep-alive|
+  0058  3c 21 44 4f 43 54 59 50 45 20 68 74 6d 6c 3e 0a  <!DOCTYPE html>.
+        … (127 bytes of HTML body) …
+
+  Total frame size: 9 (fixed hdr) + 199 (payload) = 208 bytes
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Byte-level field summary  (both frames)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Field             Request byte(s)   Value     Response byte(s)  Value
+  ────────────────  ────────────────  ───────   ────────────────  ──────
+  VER               00                0x01      00                0x01
+  FRAME_TYPE        01                0x01      01                0x02
+  FLAGS             02                0x01      02                0x01
+  PAYLOAD_LEN       03-06             57        03-06             199
+  HDR_BLOCK_LEN     07-08             37        07-08             72
+  METHOD/STATUS     09                0x01=GET  09                0x02=2xx
+  PATH/REASON LEN   0a                12        0a                2
+  PATH/REASON       0b-16             /index…   0b-0c             OK
+  Header block      17-3f             2 hdrs    0d-57             4 hdrs
+  Body              —                 0 bytes   58-d6             127 bytes
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Notes
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  • All multi-byte integers are big-endian (network byte order).
+  • The PAYLOAD_LENGTH field counts bytes starting from byte 07
+    (i.e., HDR_BLOCK_LEN and everything after it).
+  • END_STREAM (FLAGS = 0x01) means this single frame carries the
+    entire message — there is no continuation frame.
+  • The server never closes the TCP connection after sending the
+    response (per spec §6), satisfying "keep the connection open".
+  • bcurl never opens a second connection (per spec §6 client rule).
+
+════════════════════════════════════════════════════════════════════════

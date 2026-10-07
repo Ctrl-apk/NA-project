@@ -1,0 +1,22 @@
+bserve.c:22: warning: ignoring '#pragma comment ' [-Wunknown-pragmas]
+   22 | #  pragma comment(lib, "ws2_32.lib")
+bserve.c:24:20: error: conflicting types for 'closesocket'; have 'int(int)'
+   24 | #  define close(s) closesocket(s)
+      |                    ^~~~~~~~~~~
+In file included from bserve.c:20:
+C:/msys64/mingw64/include/winsock2.h:1005:34: note: previous declaration of 'closesocket' with type 'int(SOCKET)' {aka 'int(long long unsigned int)'}
+ 1005 |   WINSOCK_API_LINKAGE int WSAAPI closesocket(SOCKET s);
+      |                                  ^~~~~~~~~~~
+frame.c:14: warning: ignoring '#pragma comment ' [-Wunknown-pragmas]
+   14 | #  pragma comment(lib, "ws2_32.lib")
+frame.c:15:16: error: conflicting types for 'ssize_t'; have 'int'
+   15 |    typedef int ssize_t;
+      |                ^~~~~~~
+In file included from C:/msys64/mingw64/include/crtdefs.h:10,
+                 from C:/msys64/mingw64/include/stdint.h:28,
+                 from C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/16.1.0/include/stdint.h:11,
+                 from frame.h:32,
+                 from frame.c:5:
+C:/msys64/mingw64/include/corecrt.h:45:35: note: previous declaration of 'ssize_t' with type 'ssize_t' {aka 'long long int'}
+   45 | __MINGW_EXTENSION typedef __int64 ssize_t;
+      |                                   ^~~~~~~
