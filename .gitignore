@@ -1,0 +1,16 @@
+# Compiled binaries
+*.exe
+*.o
+*.out
+
+# Temporary build/test files
+err_bserve.txt
+out_bserve.txt
+/tmp/
+
+# Editor/OS junk
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
